@@ -1,0 +1,42 @@
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    transition: visibility 0.2s, opacity 0.2s;
+  }
+  
+  .modal-backdrop.invisible {
+    visibility: hidden;
+    opacity: 0;
+  }
+  
+  .modal-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, opacity 0.2s;
+    width: 1000px;
+    max-width: 85%;
+    height: 500px;
+  }
+  
+  .modal-container.active {
+    transform: scale(1);
+    opacity: 1;
+  }
+  
+  .modal-close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
