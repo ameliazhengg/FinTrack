@@ -1,0 +1,32 @@
+/* src/components/FinTrackTable.css */
+.fintrack-table-container {
+    width: 50%; /* Set the width to 50% of the parent container */
+    margin: 20px auto; /* Add margin to the top and bottom */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    float: left; /* Float the container to the right */
+}
+
+.fintrack-table {
+    width: 100%; /* Table takes the full width of the container */
+    border-collapse: collapse;
+}
+
+.fintrack-table th, .fintrack-table td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 10px;
+}
+
+.fintrack-table th {
+    background-color: #f4f4f4;
+}
+
+.negative {
+    color: red; /* Color for negative amounts */
+}
+
+.positive {
+    color: green; /* Color for positive amounts */
+}
