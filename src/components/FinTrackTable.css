@@ -30,3 +30,9 @@
 .positive {
     color: green; /* Color for positive amounts */
 }
+
+.fintrack-table-container {
+    position: relative; /* Ensures relative positioning */
+    overflow: visible; /* Allows child elements to overflow */
+    z-index: 1; /* Sets z-index to ensure correct stacking */
+  }

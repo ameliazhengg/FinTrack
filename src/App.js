@@ -1,22 +1,3 @@
-/**
- * Main React Application Component.
- * 
- * This component is the entry point of the React application and is responsible 
- * for rendering the header, welcome section, and financial data table. It manages 
- * the state of table data and fetches existing data from the backend on initial load.
- * 
- * State:
- * - tableData (array): Stores the table data fetched from the backend and updated upon file upload.
- * 
- * Props:
- * - None
- * 
- * Related components: Header, WelcomeSection, FinTrackTable
- * 
- * Example usage:
- * <App />
- */
-
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Header from './components/Header';
@@ -25,29 +6,42 @@ import WelcomeSection from './components/WelcomeSection';
 import axios from 'axios';
 
 /**
- * App component: The main component for the React application.
+ * Main Application Component
  * 
- * This function defines the main app structure, fetches initial data from the backend,
- * and handles the state of table data, which is passed to other components.
+ * This component serves as the root of the React application. It handles fetching 
+ * transaction data from the backend, managing state for the transaction table, 
+ * and rendering key components such as Header, WelcomeSection, and FinTrackTable.
  * 
- * @returns {JSX.Element} - The rendered App component.
+ * Components:
+ * - Header: Displays the header section with navigation links and branding.
+ * - WelcomeSection: Provides the file upload feature and allows new transactions 
+ *   to be added to the table data.
+ * - FinTrackTable: Displays the transaction table with options to add and delete 
+ *   transactions, interacting with the backend to keep data consistent.
+ * 
+ * State:
+ * - tableData: An array of transaction objects used to populate the transaction table.
+ * 
+ * Example usage:
+ * <App />
  */
 function App() {
-  // State to manage table data
+  // State to manage the transaction data
   const [tableData, setTableData] = useState([]);
 
   /**
-   * Fetches existing data from the backend upon initial component mount.
+   * useEffect hook to fetch transaction data from the backend on initial load.
    * 
-   * This useEffect hook runs once on mount and sends a GET request to the '/get_data' 
-   * endpoint to retrieve previously uploaded data. If the request is successful, 
-   * it updates the table data state.
+   * This asynchronous function sends a GET request to the '/get_data' endpoint and 
+   * updates the state with the fetched data. It runs once when the component mounts.
    */
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Send GET request to fetch transaction data
         const response = await axios.get('/get_data');
         if (response.status === 200) {
+          // Update state with the fetched data
           setTableData(response.data);
         }
       } catch (error) {
@@ -55,34 +49,42 @@ function App() {
       }
     };
 
-    fetchData(); // Call fetchData function
-  }, []); // Empty dependency array ensures this runs once on component mount
+    fetchData(); // Call the fetch function on component mount
+  }, []);
 
   /**
-   * Appends new data to the existing table data.
+   * Appends new transaction data to the existing table data.
    * 
-   * This function is used as a callback prop to update the tableData state 
-   * with new data received from the EnhancedFileUpload component.
+   * This function updates the tableData state by adding the new data to the 
+   * existing data array.
    * 
-   * @param {Array} newData - An array of new data records to be added to tableData.
+   * @param {Array} newData - Array of new transaction objects to be added to the table.
    */
   const appendTableData = (newData) => {
     setTableData((prevData) => [...prevData, ...newData]);
   };
 
+  /**
+   * Renders the main application structure.
+   * 
+   * It includes the Header, WelcomeSection, and FinTrackTable components, passing 
+   * relevant props to manage the transaction data.
+   * 
+   * @returns {JSX.Element} The rendered application structure.
+   */
   return (
     <div className="App">
-      {/* Header component for displaying the application header */}
       <header className="App-header">
+        {/* Render Header component */}
         <Header />
 
-        {/* WelcomeSection component for file upload and data update */}
+        {/* Render WelcomeSection with a prop to append new transactions */}
         <WelcomeSection setTableData={appendTableData} />
       </header>
 
-      {/* Main section displaying the financial data table */}
       <main>
-        <FinTrackTable data={tableData} />
+        {/* Render FinTrackTable with transaction data and update function */}
+        <FinTrackTable data={tableData} setTableData={setTableData} />
       </main>
     </div>
   );
