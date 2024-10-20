@@ -1,6 +1,30 @@
+/**
+ * FinTrackTable Component
+ * 
+ * This component renders a table that displays financial transaction data.
+ * It dynamically generates rows based on the provided data prop.
+ * 
+ * Props:
+ * @param {Array<Object>} data - An array of transaction objects containing 
+ * information like Date, Description, Amount, Balance, and Category.
+ * 
+ * The component visually differentiates positive and negative amounts using 
+ * specific CSS classes ('positive' for positive amounts and 'negative' for negative amounts).
+ * 
+ * Example usage:
+ * <FinTrackTable data={tableData} />
+ */
+
 import React from 'react';
 import './FinTrackTable.css';
 
+/**
+ * Renders a table displaying transaction data.
+ * 
+ * @param {Object} props - Component props.
+ * @param {Array<Object>} props.data - An array of transaction objects to be displayed in the table.
+ * @returns {JSX.Element} - The rendered FinTrackTable component.
+ */
 const FinTrackTable = ({ data }) => {
   return (
     <div className="fintrack-table-container">
@@ -16,10 +40,12 @@ const FinTrackTable = ({ data }) => {
         </thead>
         <tbody>
           {data.length === 0 ? (
+            // Display message when no data is available
             <tr>
               <td colSpan="5" style={{ textAlign: 'center' }}>No data available.</td>
             </tr>
           ) : (
+            // Map through transaction data and render rows
             data.map((transaction, index) => (
               <tr key={index}>
                 <td>{transaction.Date}</td>
