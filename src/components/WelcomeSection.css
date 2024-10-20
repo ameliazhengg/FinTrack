@@ -1,0 +1,26 @@
+.welcome-section {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .upload-section {
+    margin-top: 10px;
+  }
+  
+  .upload-label {
+    margin-right: 10px;
+  }
+  
+  .import-button {
+    background-color: #d9534f;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .import-button:hover {
+    background-color: #c9302c;
+  }
+  
