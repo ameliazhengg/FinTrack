@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Modal from './Modal';
-import FileUpload from './FileUpload';  // Import FileUpload
+import EnhancedFileUpload from './EnhancedFileUpload';
 import './WelcomeSection.css';
 
-function WelcomeSection() {
+function WelcomeSection({ setTableData }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -13,16 +13,13 @@ function WelcomeSection() {
         <label htmlFor="upload-file" className="upload-label">
           Upload File:
         </label>
-        <button
-          className="import-button"
-          onClick={() => setOpen(true)}
-        >
+        <button className="import-button" onClick={() => setOpen(true)}>
           Import
         </button>
       </div>
 
       <Modal open={open} onClose={() => setOpen(false)}>
-        <FileUpload />
+        <EnhancedFileUpload setTableData={setTableData} /> {/* Pass setTableData prop */}
       </Modal>
     </div>
   );

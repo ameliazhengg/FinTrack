@@ -1,24 +1,42 @@
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Header from './components/Header';
-<<<<<<< HEAD
-import FinTrackTable from './components/FinTrackTable'; // Import the FinTrackTable component
-=======
+import FinTrackTable from './components/FinTrackTable';
 import WelcomeSection from './components/WelcomeSection';
-import React from 'react';
->>>>>>> 43dc16a5eb288fc8a1fdf33f498c7e03a60abd69
+import axios from 'axios';
 
 function App() {
+  const [tableData, setTableData] = useState([]); // Manage table data
+
+  // Fetch existing data from the backend on initial load
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/get_data');
+        if (response.status === 200) {
+          setTableData(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Function to handle appending new data to the existing table data
+  const appendTableData = (newData) => {
+    setTableData((prevData) => [...prevData, ...newData]);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <Header />
-<<<<<<< HEAD
-=======
-        <WelcomeSection />
->>>>>>> 43dc16a5eb288fc8a1fdf33f498c7e03a60abd69
+        <WelcomeSection setTableData={appendTableData} /> {/* Pass appendTableData prop */}
       </header>
       <main>
-        <FinTrackTable /> {/* Render the FinTrackTable component */}
+        <FinTrackTable data={tableData} /> {/* Pass tableData to FinTrackTable */}
       </main>
     </div>
   );
