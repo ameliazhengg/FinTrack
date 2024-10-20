@@ -1,6 +1,10 @@
 .welcome-section {
-  text-align: center;
-  margin-top: 20px;
+  display: flex;  /* Use flexbox for alignment */
+  flex-direction: column;  /* Stack elements vertically */
+  align-items: flex-start;  /* Align items to the left */
+  margin: 20px;  /* Add some margin around the component */
+  margin-left: 40px;
+  width: 250px;  /* Set a fixed width for the component */
 }
 
 .welcome-heading {
@@ -11,7 +15,6 @@
 .upload-section {
   display: flex;
   align-items: center;
-  justify-content: center;
   margin-top: 20px;
 }
 
@@ -34,7 +37,7 @@
 }
 
 .modal-content {
-  text-align: center;
+  text-align: left;  /* Align modal content to the left */
 }
 
 .modal-heading {

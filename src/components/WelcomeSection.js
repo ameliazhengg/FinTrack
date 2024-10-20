@@ -42,7 +42,7 @@ function WelcomeSection({ setTableData }) {
       {/* Section for file upload button */}
       <div className="upload-section">
         <label htmlFor="upload-file" className="upload-label">
-          Upload File:
+          <b>Upload File:</b>
         </label>
 
         {/* Button to open the modal for file upload */}

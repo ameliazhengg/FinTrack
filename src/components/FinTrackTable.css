@@ -1,15 +1,16 @@
-/* src/components/FinTrackTable.css */
 .fintrack-table-container {
-    width: 50%; /* Set the width to 50% of the parent container */
-    margin: 20px auto; /* Add margin to the top and bottom */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Aligns the table to the left */
     padding: 20px;
-    border-radius: 5px;
+    width: 50%; /* Restricts the table's width */
+    margin-left: 40px; /* Adds space from the left side */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    float: left; /* Float the container to the right */
+    border-radius: 5px;
 }
 
 .fintrack-table {
-    width: 100%; /* Table takes the full width of the container */
+    width: 100%;
     border-collapse: collapse;
 }
 
@@ -24,15 +25,65 @@
 }
 
 .negative {
-    color: red; /* Color for negative amounts */
+    color: red;
 }
 
 .positive {
-    color: green; /* Color for positive amounts */
+    color: green;
 }
 
-.fintrack-table-container {
-    position: relative; /* Ensures relative positioning */
-    overflow: visible; /* Allows child elements to overflow */
-    z-index: 1; /* Sets z-index to ensure correct stacking */
-  }
+.add-button {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-button:hover {
+    background-color: #218838;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+input {
+    padding: 8px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    width: 90%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.date-picker-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+input::placeholder {
+    color: #ccc;
+}
+
+/* Ensure the container doesn't encroach top space */
+.fintrack-wrapper {
+    display: flex;
+    justify-content: flex-start; /* Aligns to the left */
+    align-items: flex-start;
+    margin-top: 20px; /* Adds some space from the top */
+}

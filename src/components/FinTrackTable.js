@@ -37,8 +37,7 @@ const FinTrackTable = ({ data, setTableData }) => {
   /**
    * Handles input changes for new transaction fields.
    * 
-   * It updates the state based on the input field's name and value, ensuring that
-   * the state is updated correctly for each transaction field.
+   * It updates the state based on the input field's name and value.
    * 
    * @param {Object} e - Event object from the input field.
    */
@@ -130,95 +129,96 @@ const FinTrackTable = ({ data, setTableData }) => {
   };
 
   return (
-    <div className="fintrack-table-container">
-      <table className="fintrack-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Balance</th>
-            <th>Category</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.length === 0 ? (
+    <div className="fintrack-wrapper">
+      <div className="fintrack-table-container">
+        <table className="fintrack-table">
+          <thead>
             <tr>
-              <td colSpan="6" style={{ textAlign: 'center' }}>No data available.</td>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Amount</th>
+              <th>Balance</th>
+              <th>Category</th>
+              <th>Actions</th>
             </tr>
-          ) : (
-            data.map((transaction, index) => (
-              <tr key={index}>
-                <td>{new Date(transaction.Date).toLocaleDateString()}</td>
-                <td>{transaction.Description}</td>
-                <td className={transaction.Amount < 0 ? 'negative' : 'positive'}>
-                  {transaction.Amount}
-                </td>
-                <td>{transaction.Balance}</td>
-                <td>{transaction.Category}</td>
-                <td>
-                  <button onClick={() => handleDeleteTransaction(index)}>Delete</button>
-                </td>
+          </thead>
+          <tbody>
+            {data.length === 0 ? (
+              <tr>
+                <td colSpan="6" style={{ textAlign: 'center' }}>No data available.</td>
               </tr>
-            ))
-          )}
-          {/* Row for adding a new transaction */}
-          <tr>
-            <td>
-              <DatePicker
-                selected={newTransaction.Date}
-                onChange={handleDateChange}
-                dateFormat="yyyy-MM-dd"
-                placeholderText="Select date"
-                popperPlacement="bottom-start"
-                popperProps={{ strategy: 'fixed' }}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="Description"
-                value={newTransaction.Description}
-                onChange={handleInputChange}
-                placeholder="Description"
-              />
-            </td>
-            <td>
-              <input
-                type="number"
-                name="Amount"
-                value={newTransaction.Amount}
-                onChange={handleInputChange}
-                placeholder="Amount"
-              />
-            </td>
-            <td>
-              <input
-                type="number"
-                name="Balance"
-                value={newTransaction.Balance}
-                onChange={handleInputChange}
-                placeholder="Balance"
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="Category"
-                value={newTransaction.Category}
-                onChange={handleInputChange}
-                placeholder="Category"
-              />
-            </td>
-            <td>
-              <button onClick={handleAddTransaction}>Add</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            ) : (
+              data.map((transaction, index) => (
+                <tr key={index}>
+                  <td>{new Date(transaction.Date).toLocaleDateString()}</td>
+                  <td>{transaction.Description}</td>
+                  <td className={transaction.Amount < 0 ? 'negative' : 'positive'}>
+                    {transaction.Amount}
+                  </td>
+                  <td>{transaction.Balance}</td>
+                  <td>{transaction.Category}</td>
+                  <td>
+                    <button className="delete-button" onClick={() => handleDeleteTransaction(index)}>Delete</button>
+                  </td>
+                </tr>
+              ))
+            )}
+            <tr>
+              <td>
+                <DatePicker
+                  selected={newTransaction.Date}
+                  onChange={handleDateChange}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="Select date"
+                  popperPlacement="bottom-start"
+                  popperProps={{ strategy: 'fixed' }}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="Description"
+                  value={newTransaction.Description}
+                  onChange={handleInputChange}
+                  placeholder="Description"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  name="Amount"
+                  value={newTransaction.Amount}
+                  onChange={handleInputChange}
+                  placeholder="Amount"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  name="Balance"
+                  value={newTransaction.Balance}
+                  onChange={handleInputChange}
+                  placeholder="Balance"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="Category"
+                  value={newTransaction.Category}
+                  onChange={handleInputChange}
+                  placeholder="Category"
+                />
+              </td>
+              <td>
+                <button className="add-button" onClick={handleAddTransaction}>Add</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  );
+  );  
 };
 
 export default FinTrackTable;
