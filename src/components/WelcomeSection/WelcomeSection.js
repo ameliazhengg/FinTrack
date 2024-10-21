@@ -23,8 +23,8 @@
  */
 
 import React, { useState, useCallback } from 'react';
-import Modal from './Modal';
-import EnhancedFileUpload from './EnhancedFileUpload';
+import Modal from '../Modal/Modal';
+import EnhancedFileUpload from '../EnhancedFileUpload/EnhancedFileUpload';
 import './WelcomeSection.css';
 
 /**

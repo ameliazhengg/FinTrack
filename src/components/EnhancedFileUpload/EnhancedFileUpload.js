@@ -114,12 +114,14 @@ function EnhancedFileUpload({ setTableData, onClose }) {
       } else {
         setIsError(true);
         setErrorMessage(`Server error: ${response.data?.error || 'Unknown error'}`);
+        setUploadProgress(0);
         setFile(null);  // Clear the file selection on error
       }
     } catch (error) {
       setIsError(true);
       const serverError = error.response?.data?.error || error.message || 'Unknown error occurred.';
       setErrorMessage(`Upload error: ${serverError}`);
+      setUploadProgress(0);
       setFile(null);  // Clear the file selection on error
     }
   };

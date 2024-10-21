@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Header from './components/Header';
-import FinTrackTable from './components/FinTrackTable';
-import WelcomeSection from './components/WelcomeSection';
+import Header from './components/Header/Header';
+import FinTrackTable from './components/FinTrackTable/FinTrackTable';
+import WelcomeSection from './components/WelcomeSection/WelcomeSection';
 import axios from 'axios';
 
 /**
