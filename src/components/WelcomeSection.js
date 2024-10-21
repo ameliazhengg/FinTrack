@@ -5,6 +5,13 @@
  * to open a modal for file uploads. It manages the state for modal visibility 
  * and facilitates the data upload process through the EnhancedFileUpload component.
  * 
+ * Features:
+ * - Displays a welcome heading
+ * - Provides an "Import" button to open a file upload modal
+ * - Manages modal visibility state
+ * - Renders a Modal component with EnhancedFileUpload when open
+ * - Handles modal closure and state reset
+ * 
  * Props:
  * - setTableData (function): A function to update the parent component's state 
  *   with new data uploaded through the file upload modal.
@@ -12,49 +19,65 @@
  * Related components: Modal, EnhancedFileUpload
  * 
  * Example usage:
- * <WelcomeSection setTableData={appendTableData} />
+ * <WelcomeSection setTableData={updateParentData} />
  */
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Modal from './Modal';
 import EnhancedFileUpload from './EnhancedFileUpload';
 import './WelcomeSection.css';
 
 /**
- * WelcomeSection component: Handles the rendering of a welcome message, an upload button,
- * and a modal for file uploads. It manages the state for modal visibility and facilitates 
- * the file upload process.
+ * WelcomeSection component: Renders a welcome message, an upload button,
+ * and a modal for file uploads. It manages the state for modal visibility 
+ * and facilitates the file upload process.
  * 
  * @param {Object} props - The properties passed to the component.
  * @param {function} props.setTableData - Callback function to update table data in the parent component.
  * 
- * @returns {JSX.Element} - The rendered WelcomeSection component.
+ * @returns {JSX.Element} The rendered WelcomeSection component.
  */
 function WelcomeSection({ setTableData }) {
   // State to manage modal visibility
-  const [open, setOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  /**
+   * Handles opening the modal.
+   */
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  /**
+   * Handles closing the modal and resetting the upload state.
+   * This function is memoized to prevent unnecessary re-renders.
+   */
+  const handleCloseModal = useCallback(() => {
+    console.log('Modal closed, resetting state'); // Debugging log
+    setModalOpen(false);
+  }, []);
 
   return (
     <div className="welcome-section">
-      {/* Heading for the welcome section */}
+      {/* Welcome heading */}
       <h1 className="welcome-heading">Welcome</h1>
-
-      {/* Section for file upload button */}
+      
+      {/* Upload section with import button */}
       <div className="upload-section">
         <label htmlFor="upload-file" className="upload-label">
           <b>Upload File:</b>
         </label>
-
-        {/* Button to open the modal for file upload */}
-        <button className="import-button" onClick={() => setOpen(true)}>
+        <button className="import-button" onClick={handleOpenModal}>
           Import
         </button>
       </div>
 
-      {/* Modal component containing the EnhancedFileUpload for file upload functionality */}
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <EnhancedFileUpload setTableData={setTableData} />
-      </Modal>
+      {/* Conditional rendering of Modal component */}
+      {isModalOpen && (
+        <Modal open={isModalOpen} onClose={handleCloseModal}>
+          <EnhancedFileUpload setTableData={setTableData} onClose={handleCloseModal} />
+        </Modal>
+      )}
     </div>
   );
 }

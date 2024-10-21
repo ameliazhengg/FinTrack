@@ -1,3 +1,6 @@
+import React from 'react';
+import './Modal.css';
+
 /**
  * Modal Component
  * 
@@ -5,6 +8,14 @@
  * It includes backdrop functionality to close the modal when clicking outside of it
  * and a close button within the modal. The component can display any children elements 
  * passed to it, making it reusable for various content.
+ * 
+ * Features:
+ * - Conditional rendering based on 'open' prop
+ * - Backdrop click to close
+ * - Close button within the modal
+ * - Flexible content through children prop
+ * - Prevents event propagation for clicks inside the modal
+ * - Console logging for debugging (backdrop and close button clicks)
  * 
  * Props:
  * - open (boolean): Controls whether the modal is visible or hidden.
@@ -19,40 +30,44 @@
  * </Modal>
  */
 
-import React from 'react';
-import './Modal.css';
-
 /**
- * Modal component: Renders a modal overlay that is visible when the `open` prop is true.
- * The modal can be closed by clicking on the backdrop or the close button inside the modal.
- * It contains a flexible children prop to render any content within the modal.
+ * Modal component: Renders a modal overlay when the 'open' prop is true.
  * 
  * @param {Object} props - The properties passed to the component.
- * @param {boolean} props.open - Determines if the modal is visible or not.
+ * @param {boolean} props.open - Determines if the modal is visible.
  * @param {function} props.onClose - Callback function to close the modal.
  * @param {React.ReactNode} props.children - Content to render inside the modal.
  * 
- * @returns {JSX.Element} - The rendered Modal component.
+ * @returns {JSX.Element|null} The rendered Modal component or null if not open.
  */
 export default function Modal({ open, onClose, children }) {
+  // Early return if the modal should not be displayed
+  if (!open) return null;
+
   return (
     <div
-      onClick={onClose}  // Close the modal when clicking the backdrop
-      className={`modal-backdrop ${open ? 'visible' : 'invisible'}`}  // Toggle visibility
+      className="modal-backdrop visible"
+      onClick={() => {
+        console.log('Backdrop clicked'); // Debugging log
+        onClose();  // Trigger the close function
+      }}
     >
       <div
         onClick={(e) => e.stopPropagation()}  // Prevent closing when clicking inside the modal
-        className={`modal-container ${open ? 'active' : ''}`}  // Toggle active state
+        className="modal-container active"
       >
         {/* Close button inside the modal */}
         <button
-          onClick={onClose}
+          onClick={() => {
+            console.log('Close button clicked'); // Debugging log
+            onClose();  // Trigger the close function
+          }}
           className="modal-close-icon"
         >
           &times;
         </button>
 
-        {/* Render children elements inside the modal */}
+        {/* Render the children elements passed to the modal */}
         {children}
       </div>
     </div>

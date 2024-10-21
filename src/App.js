@@ -8,19 +8,17 @@ import axios from 'axios';
 /**
  * Main Application Component
  * 
- * This component serves as the root of the React application. It handles fetching 
- * transaction data from the backend, managing state for the transaction table, 
- * and rendering key components such as Header, WelcomeSection, and FinTrackTable.
- * 
- * Components:
- * - Header: Displays the header section with navigation links and branding.
- * - WelcomeSection: Provides the file upload feature and allows new transactions 
- *   to be added to the table data.
- * - FinTrackTable: Displays the transaction table with options to add and delete 
- *   transactions, interacting with the backend to keep data consistent.
+ * This component serves as the root of the React application. It manages the state
+ * for transaction data, fetches initial data from the backend, and renders the main
+ * structure of the application including the header, welcome section, and transaction table.
  * 
  * State:
  * - tableData: An array of transaction objects used to populate the transaction table.
+ * 
+ * Components:
+ * - Header: Displays the application header.
+ * - WelcomeSection: Provides file upload functionality and allows adding new transactions.
+ * - FinTrackTable: Displays the transaction data in a table format.
  * 
  * Example usage:
  * <App />
@@ -30,18 +28,16 @@ function App() {
   const [tableData, setTableData] = useState([]);
 
   /**
-   * useEffect hook to fetch transaction data from the backend on initial load.
+   * useEffect hook to fetch initial transaction data from the backend.
    * 
-   * This asynchronous function sends a GET request to the '/get_data' endpoint and 
-   * updates the state with the fetched data. It runs once when the component mounts.
+   * This effect runs once when the component mounts. It sends a GET request
+   * to the '/get_data' endpoint and updates the tableData state with the response.
    */
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Send GET request to fetch transaction data
         const response = await axios.get('/get_data');
         if (response.status === 200) {
-          // Update state with the fetched data
           setTableData(response.data);
         }
       } catch (error) {
@@ -49,14 +45,11 @@ function App() {
       }
     };
 
-    fetchData(); // Call the fetch function on component mount
+    fetchData();
   }, []);
 
   /**
    * Appends new transaction data to the existing table data.
-   * 
-   * This function updates the tableData state by adding the new data to the 
-   * existing data array.
    * 
    * @param {Array} newData - Array of new transaction objects to be added to the table.
    */
@@ -64,26 +57,16 @@ function App() {
     setTableData((prevData) => [...prevData, ...newData]);
   };
 
-  /**
-   * Renders the main application structure.
-   * 
-   * It includes the Header, WelcomeSection, and FinTrackTable components, passing 
-   * relevant props to manage the transaction data.
-   * 
-   * @returns {JSX.Element} The rendered application structure.
-   */
   return (
     <div className="App">
       <header className="App-header">
-        {/* Render Header component */}
+        {/* Render the Header component */}
         <Header />
-
-        {/* Render WelcomeSection with a prop to append new transactions */}
+        {/* Render the WelcomeSection component with the ability to append new data */}
         <WelcomeSection setTableData={appendTableData} />
       </header>
-
       <main>
-        {/* Render FinTrackTable with transaction data and update function */}
+        {/* Render the FinTrackTable component with current data and the ability to update it */}
         <FinTrackTable data={tableData} setTableData={setTableData} />
       </main>
     </div>
