@@ -3,6 +3,7 @@ import './App.css';
 import Header from './components/Header/Header';
 import FinTrackTable from './components/FinTrackTable/FinTrackTable';
 import WelcomeSection from './components/WelcomeSection/WelcomeSection';
+import SpendingLimit from './components/SpendingLimit/SpendingLimit';
 import axios from 'axios';
 
 /**
@@ -60,15 +61,33 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {/* Render the Header component */}
         <Header />
-        {/* Render the WelcomeSection component with the ability to append new data */}
-        <WelcomeSection setTableData={appendTableData} />
       </header>
-      <main>
-        {/* Render the FinTrackTable component with current data and the ability to update it */}
-        <FinTrackTable data={tableData} setTableData={setTableData} />
-      </main>
+      <div className="content-wrapper" style={{ 
+        display: 'flex',
+        width: '100%',
+        position: 'relative',
+        marginTop: '20px' // Add space below header
+      }}>
+        {/* Main content column */}
+        <div className="main-content" style={{ 
+          flex: '1',
+          paddingRight: '400px' // Increased space for larger spending limit
+        }}>
+          <WelcomeSection setTableData={appendTableData} />
+          <FinTrackTable data={tableData} setTableData={setTableData} />
+        </div>
+        
+        {/* Spending limit column */}
+        <div className="spending-limit-wrapper" style={{
+          position: 'absolute',
+          top: '0',
+          right: '0',
+          width: '380px' // Increased width
+        }}>
+          <SpendingLimit />
+        </div>
+      </div>
     </div>
   );
 }
