@@ -24,7 +24,7 @@ import json
 import os
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for the Flask app
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Enable CORS for the Flask app
 
 DATA_FILE = 'transactions.json'
 
