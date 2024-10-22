@@ -24,7 +24,7 @@ import json
 import os
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for the Flask app
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Enable CORS for the Flask app
 
 DATA_FILE = 'transactions.json'
 
@@ -182,4 +182,4 @@ def delete_transaction():
     return jsonify(deleted_transaction), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)
