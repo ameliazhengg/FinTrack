@@ -108,3 +108,6 @@ media/
 
 # Editor backups
 *~
+
+# Ignore transaction data files
+transactions.json

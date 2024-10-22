@@ -3,10 +3,10 @@
     flex-direction: column;
     align-items: flex-start; /* Aligns the table to the left */
     padding: 20px;
-    width: 50%; /* Restricts the table's width */
-    margin-left: 40px; /* Adds space from the left side */
+    width: 100%; /* Restricts the table's width */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
+    background-color: white;
 }
 
 .fintrack-table {
@@ -83,7 +83,13 @@ input::placeholder {
 /* Ensure the container doesn't encroach top space */
 .fintrack-wrapper {
     display: flex;
-    justify-content: flex-start; /* Aligns to the left */
+    flex-direction: column; 
+    justify-content: flex-start; 
     align-items: flex-start;
-    margin-top: 20px; /* Adds some space from the top */
+    margin-top: 20px; 
+    width: 100%; 
+    min-width: max-content; 
+    max-width: max-content;
+    padding: 20px 40px 20px 40px;
 }
+
