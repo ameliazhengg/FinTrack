@@ -1,9 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SpendingLimit.css';
 
 const SpendingLimit = () => {
-  const [limit, setLimit] = useState(1200); // Default limit of $1200
-  const spent = 300; // Hardcoded spent amount
+  const [limit, setLimit] = useState(1200);
+  const [spent, setSpent] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  // Function to fetch and calculate spending
+  const fetchTransactions = async () => {
+    try {
+      const response = await fetch('http://localhost:5005/get_data');
+      const data = await response.json();
+      
+      // Calculate total spent by summing negative amounts
+      const totalSpent = data
+        .filter(transaction => parseFloat(transaction.Amount) < 0)
+        .reduce((sum, transaction) => sum + Math.abs(parseFloat(transaction.Amount)), 0);
+      
+      setSpent(totalSpent);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      setLoading(false);
+    }
+  };
+
+  // Set up polling interval when component mounts
+  useEffect(() => {
+    // Initial fetch
+    fetchTransactions();
+
+    // Set up polling
+    const intervalId = setInterval(fetchTransactions, 500);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []); // Empty dependency array means this runs once on component mount
 
   // Calculate percentage for progress bar
   const percentage = Math.min((spent / limit) * 100, 100);
@@ -19,6 +51,21 @@ const SpendingLimit = () => {
   const radius = 45;
   const circumference = Math.PI * radius;
   const strokeDashoffset = circumference * (1 - percentage / 100);
+
+  // Add a subtle animation for the spent amount
+  const AnimatedAmount = ({ value }) => {
+    const [displayValue, setDisplayValue] = useState(value);
+
+    useEffect(() => {
+      setDisplayValue(value);
+    }, [value]);
+
+    return (
+      <span className="amount" style={{ transition: 'color 0.3s ease' }}>
+        ${displayValue.toFixed(2)}
+      </span>
+    );
+  };
 
   return (
     <div className="spending-limit-container">
@@ -47,7 +94,7 @@ const SpendingLimit = () => {
               strokeWidth="8"
               className="progress-ring-background"
             />
-            {/* Progress semicircle */}
+            {/* Progress semicircle with smooth transition */}
             <path
               d="M5,50 A45,45 0 1,1 95,50"
               fill="none"
@@ -56,11 +103,18 @@ const SpendingLimit = () => {
               strokeDasharray={`${circumference}`}
               strokeDashoffset={strokeDashoffset}
               className="progress-ring-circle"
+              style={{ transition: 'stroke-dashoffset 0.3s ease, stroke 0.3s ease' }}
             />
           </svg>
           <div className="progress-text">
-            <span className="amount">${spent}</span>
-            <span className="limit">of ${limit}</span>
+            {loading ? (
+              <span className="amount">Loading...</span>
+            ) : (
+              <>
+                <AnimatedAmount value={spent} />
+                <span className="limit">of ${limit}</span>
+              </>
+            )}
           </div>
         </div>
       </div>
