@@ -20,20 +20,22 @@ import axios from 'axios';
  * - Header: Displays the application header.
  * - WelcomeSection: Provides file upload functionality and allows adding new transactions.
  * - FinTrackTable: Displays the transaction data in a table format.
+ * - SpendingLimit: Incrementally displays negative transactions as a proportion of a total set spending limit.
  * 
  * Example usage:
  * <App />
  */
+
 function App() {
   // State to manage the transaction data
   const [tableData, setTableData] = useState([]);
-
   /**
    * useEffect hook to fetch initial transaction data from the backend.
    * 
    * This effect runs once when the component mounts. It sends a GET request
    * to the '/get_data' endpoint and updates the tableData state with the response.
    */
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,11 +51,6 @@ function App() {
     fetchData();
   }, []);
 
-  /**
-   * Appends new transaction data to the existing table data.
-   * 
-   * @param {Array} newData - Array of new transaction objects to be added to the table.
-   */
   const appendTableData = (newData) => {
     setTableData((prevData) => [...prevData, ...newData]);
   };
@@ -63,28 +60,15 @@ function App() {
       <header className="App-header">
         <Header />
       </header>
-      <div className="content-wrapper" style={{ 
-        display: 'flex',
-        width: '100%',
-        position: 'relative',
-        marginTop: '20px' // Add space below header
-      }}>
-        {/* Main content column */}
-        <div className="main-content" style={{ 
-          flex: '1',
-          paddingRight: '400px' // Increased space for larger spending limit
-        }}>
+      <div className="content-wrapper">
+        {/* Main content area */}
+        <div className="main-section">
           <WelcomeSection setTableData={appendTableData} />
           <FinTrackTable data={tableData} setTableData={setTableData} />
         </div>
         
-        {/* Spending limit column */}
-        <div className="spending-limit-wrapper" style={{
-          position: 'absolute',
-          top: '0',
-          right: '0',
-          width: '380px' // Increased width
-        }}>
+        {/* Spending limit section */}
+        <div className="sidebar-section">
           <SpendingLimit />
         </div>
       </div>

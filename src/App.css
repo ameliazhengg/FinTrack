@@ -1,0 +1,39 @@
+.App {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .content-wrapper {
+    display: flex;
+    flex: 1;
+    gap: 20px;
+    padding: 20px;
+    min-height: 0; 
+    overflow: auto; 
+  }
+  
+  .main-section {
+    flex: 1;
+    min-width: 0;
+    overflow: auto; 
+  }
+  
+  .sidebar-section {
+    width: 380px;
+    flex-shrink: 0; 
+    padding: 30px;
+  }
+  
+  /* Responsive layout for smaller screens */
+  @media (max-width: 1200px) {
+    .content-wrapper {
+      flex-direction: column;
+    }
+  
+    .sidebar-section {
+      width: 100%;
+      max-width: 380px;
+      align-self: center;
+    }
+  }
