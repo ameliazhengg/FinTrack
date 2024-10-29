@@ -20,8 +20,30 @@
     padding: 10px;
 }
 
-.fintrack-table th {
+.fintrack-table th{
     background-color: #f4f4f4;
+}
+
+.fintrack-table th.sortable:hover {
+    cursor: pointer;
+    background-color: #e0e0e0;
+}
+
+.fintrack-table th:not(.sortable) {
+    cursor: default;
+    background-color: #f4f4f4;
+}
+
+.sort-icon {
+    opacity: 0.3; 
+    margin-left: 5px;
+    font-size: 12px;
+    transition: opacity 0.3s;
+}
+
+.sorted-asc .sort-icon,
+.sorted-desc .sort-icon {
+  display: none;
 }
 
 .negative {
@@ -80,7 +102,6 @@ input::placeholder {
     color: #ccc;
 }
 
-/* Ensure the container doesn't encroach top space */
 .fintrack-wrapper {
     display: flex;
     flex-direction: column; 
@@ -93,3 +114,80 @@ input::placeholder {
     padding: 20px 40px 20px 40px;
 }
 
+.sorted-asc::after {
+    content: ' ▲'; 
+}
+  
+.sorted-desc::after {
+    content: ' ▼'; 
+}
+
+/* Filter/Search Row */
+.filter-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+  
+.search-input {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 250px;
+}
+  
+.date-picker {
+    margin-right: 10px;
+    width: 250px;
+}
+
+.filter-button, .reset-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px; 
+    min-width: 100px; 
+    padding: 8px 12px;
+    white-space: nowrap;
+    border-radius: 4px;
+}
+  
+.reset-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.reset-button:hover {
+    background-color: #c82333;
+}
+  
+.date-range-display {
+    margin: 10px 0;
+    font-size: 14px;
+}
+  
+.reset-button {
+    background-color: #dc3545;
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+  
+.filter-button svg {
+    margin-right: 5px;
+}
+
+.filter-row input, .date-picker {
+    height: 40px; 
+}
+
+input::placeholder {
+    color: #ccc;
+    font-size: 14px; 
+}

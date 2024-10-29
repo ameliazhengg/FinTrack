@@ -3,6 +3,7 @@ import './FinTrackTable.css';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
 
 /**
  * FinTrackTable Component
@@ -24,15 +25,143 @@ import 'react-datepicker/dist/react-datepicker.css';
  * Example usage:
  * <FinTrackTable data={tableData} setTableData={setTableData} />
  */
-const FinTrackTable = ({ data, setTableData }) => {
-  // State to manage a new transaction entry
-  const [newTransaction, setNewTransaction] = useState({
-    Date: null,
-    Description: '',
-    Amount: '',
-    Balance: '',
-    Category: ''
-  });
+  const FinTrackTable = ({ data, setTableData }) => {
+    // State to manage a new transaction entry
+    const [newTransaction, setNewTransaction] = useState({
+      Date: null,
+      Description: '',
+      Amount: '',
+      Balance: '',
+      Category: ''
+    });
+
+
+  // State to manage sorting
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
+  // State for search, date filtering, and modal visibility
+  const [searchTerm, setSearchTerm] = useState('');
+  const [dateRange, setDateRange] = useState({ start: null, end: null });
+  const [showFilterModal, setShowFilterModal] = useState(false);
+
+
+    /**
+   * Fetches transaction data from the backend and updates the table.
+   * 
+   * @async
+   */
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('/get_data');
+      if (response.status === 200) {
+        setTableData(response.data); // Update table data with fetched data
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('Failed to fetch data. Please try again.');
+    }
+  };
+
+  /**
+   * Resets all filters and refetches the table data.
+   */
+  const resetFilters = async () => {
+    // Clear all filters
+    setSearchTerm('');
+    setDateRange({ start: null, end: null });
+    setTransactionRange({ min: null, max: null });
+
+    // Reset sorting configuration
+    setSortConfig({ key: null, direction: 'asc' });
+
+    // Refetch data from the backend
+    await fetchData();
+  };
+
+  React.useEffect(() => {
+    fetchData(); 
+  }, []);
+
+  /**
+   * State to manage transaction range for advanced filtering.
+   */
+  const [transactionRange, setTransactionRange] = useState({ min: null, max: null });
+
+  
+  /**
+   * Filters data based on search term and date range.
+   * 
+   * This function filters the table data by checking if the description contains 
+   * the search term and if the date falls within the specified date range.
+   */
+  const filterData = () => {
+    let filteredData = data;
+
+    // Apply search term filter
+    if (searchTerm) {
+      filteredData = filteredData.filter(transaction =>
+        transaction.Description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply date range filter
+    if (dateRange.start && dateRange.end) {
+      filteredData = filteredData.filter(transaction => {
+        const transactionDate = new Date(transaction.Date);
+        return transactionDate >= dateRange.start && transactionDate <= dateRange.end;
+      });
+    }
+
+    return filteredData;
+  };
+
+  /**
+   * Handles sorting of the table data based on the selected column.
+   * 
+   * @param {string} key - The column key to sort by.
+   */
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+  
+    setSortConfig({ key, direction });
+  
+    const sortedData = [...data].sort((a, b) => {
+      if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
+      if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+    
+    setTableData(sortedData);
+  };
+
+  /**
+   * Handles search input change.
+   * 
+   * @param {Object} e - Event object from the search input field.
+   */
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  /**
+   * Handles date range change from the DatePicker component.
+   * 
+   * @param {Array<Date>} dates - The selected date range from the date picker.
+   */
+  const handleDateRangeChange = (dates) => {
+    const [start, end] = dates;
+    setDateRange({ start, end });
+  };
+
+  /**
+   * Toggles the visibility of the filter modal.
+   */
+  const toggleFilterModal = () => {
+    setShowFilterModal(!showFilterModal);
+  };
 
   /**
    * Handles input changes for new transaction fields.
@@ -130,25 +259,85 @@ const FinTrackTable = ({ data, setTableData }) => {
 
   return (
     <div className="fintrack-wrapper">
+      {/* Search and Filter Row */}
+      <div className="filter-row">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search Transactions"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+          <DatePicker
+            selectsRange
+            startDate={dateRange.start}
+            endDate={dateRange.end}
+            onChange={handleDateRangeChange}
+            dateFormat="MM/dd/yyyy"
+            placeholderText="Select Date Range"
+            className="date-picker"
+          />
+          <button onClick={resetFilters} className="reset-button">Reset Filters</button>
+      </div>
+      {dateRange.start && dateRange.end && (
+        <div className="date-range-display">
+          Showing results from {dateRange.start.toLocaleDateString()} to {dateRange.end.toLocaleDateString()}
+        </div>
+      )}
       <div className="fintrack-table-container">
-        <table className="fintrack-table">
+      <table className="fintrack-table">
           <thead>
             <tr>
-              <th>Date</th>
+              <th
+                className={`sortable ${sortConfig.key === 'Date' ? (sortConfig.direction === 'asc' ? 'sorted-asc' : 'sorted-desc') : ''}`}
+                onClick={() => handleSort('Date')}
+              >
+                Date
+                {sortConfig.key === 'Date' ? (
+                  sortConfig.direction === 'asc' ? ' ▲' : ' ▼'
+                ) : (
+                  <span className="sort-icon unsorted">&#9650;&#9660;</span>
+                )}
+              </th>
+
               <th>Description</th>
-              <th>Amount</th>
+
+              <th
+                className={`sortable ${sortConfig.key === 'Amount' ? (sortConfig.direction === 'asc' ? 'sorted-asc' : 'sorted-desc') : ''}`}
+                onClick={() => handleSort('Amount')}
+              >
+                Amount
+                {sortConfig.key === 'Amount' ? (
+                  sortConfig.direction === 'asc' ? ' ▲' : ' ▼'
+                ) : (
+                  <span className="sort-icon unsorted">&#9650;&#9660;</span>
+                )}
+              </th>
+
               <th>Balance</th>
-              <th>Category</th>
+
+              <th
+                className={`sortable ${sortConfig.key === 'Category' ? (sortConfig.direction === 'asc' ? 'sorted-asc' : 'sorted-desc') : ''}`}
+                onClick={() => handleSort('Category')}
+              >
+                Category
+                {sortConfig.key === 'Category' ? (
+                  sortConfig.direction === 'asc' ? ' ▲' : ' ▼'
+                ) : (
+                  <span className="sort-icon unsorted">&#9650;&#9660;</span>
+                )}
+              </th>
+
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {data.length === 0 ? (
+            {filterData().length === 0 ? (
               <tr>
                 <td colSpan="6" style={{ textAlign: 'center' }}>No data available.</td>
               </tr>
             ) : (
-              data.map((transaction, index) => (
+              filterData().map((transaction, index) => (
                 <tr key={index}>
                   <td>{new Date(transaction.Date).toLocaleDateString()}</td>
                   <td>{transaction.Description}</td>
