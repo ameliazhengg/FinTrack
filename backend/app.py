@@ -26,6 +26,7 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from dotenv import load_dotenv
+from database import db, migrate
 from models import User, Txn, Budget, Setting, Notification
 
 # Load environment variables
@@ -34,13 +35,13 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Enable CORS for the Flask app
 
-# Configure PostgreSQL database
+# Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize SQLAlchemy and Flask-Migrate
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+# Initialize db and migrate
+db.init_app(app)
+migrate.init_app(app, db)
 
 # Define DATA_FILE and load data if it exists
 DATA_FILE = 'transactions.json'
