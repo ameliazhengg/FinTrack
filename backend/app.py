@@ -23,13 +23,27 @@ from flask_cors import CORS
 import pandas as pd
 import json
 import os
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from dotenv import load_dotenv
+from models import User, Txn, Budget, Setting, Notification
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Enable CORS for the Flask app
 
-DATA_FILE = 'transactions.json'
+# Configure PostgreSQL database
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Load data from file if it exists
+# Initialize SQLAlchemy and Flask-Migrate
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+# Define DATA_FILE and load data if it exists
+DATA_FILE = 'transactions.json'
 if os.path.exists(DATA_FILE):
     with open(DATA_FILE, 'r') as file:
         uploaded_data = json.load(file)

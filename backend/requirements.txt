@@ -1,4 +1,7 @@
-Flask==3.0.2
-flask-cors
+Flask
+Flask-Cors
+Flask-SQLAlchemy
+Flask-Migrate
 pandas
 psycopg2-binary
+python-dotenv
