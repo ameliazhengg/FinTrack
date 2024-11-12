@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './FinTrackTable.css';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
@@ -39,13 +39,12 @@ import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
   // State to manage sorting
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
-  // State for search, date filtering, and modal visibility
+  // State for search and date filtering
   const [searchTerm, setSearchTerm] = useState('');
   const [dateRange, setDateRange] = useState({ start: null, end: null });
-  const [showFilterModal, setShowFilterModal] = useState(false);
 
 
-    /**
+  /**
    * Fetches transaction data from the backend and updates the table.
    * 
    * @async
@@ -156,12 +155,6 @@ import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
     setDateRange({ start, end });
   };
 
-  /**
-   * Toggles the visibility of the filter modal.
-   */
-  const toggleFilterModal = () => {
-    setShowFilterModal(!showFilterModal);
-  };
 
   /**
    * Handles input changes for new transaction fields.

@@ -73,11 +73,14 @@ function EnhancedFileUpload({ setTableData, onClose }) {
    * @param {File} selectedFile - The file selected by the user.
    */
   const handleFileSelection = (selectedFile) => {
-    if (selectedFile && selectedFile.type.includes('csv')) {
+    if (
+      selectedFile &&
+      (selectedFile.name.toLowerCase().endsWith('.csv') || selectedFile.type.includes('csv'))
+    ) {
       setFile(selectedFile);
       setIsError(false);
       setErrorMessage('');
-      setUploadProgress(0); 
+      setUploadProgress(0);
     } else {
       setIsError(true);
       setErrorMessage('Invalid file type. Please select a CSV file.');

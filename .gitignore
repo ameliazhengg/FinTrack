@@ -115,3 +115,7 @@ media/
 
 # Ignore transaction data files
 transactions.json
+
+# Environment Files
+.env
+virtual

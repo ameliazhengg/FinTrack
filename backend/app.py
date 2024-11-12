@@ -3,7 +3,8 @@ Flask Application for File Upload and Data Management.
 
 This app handles the upload of CSV files, processes them using pandas,
 and provides endpoints to manage transaction data, including adding and 
-deleting individual transactions.
+deleting individual transactions. It also includes column standardization 
+to handle variations in column names during CSV uploads.
 
 Modules:
 - Flask
@@ -22,29 +23,113 @@ from flask_cors import CORS
 import pandas as pd
 import json
 import os
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from dotenv import load_dotenv
+from database import db, migrate
+from models import User, Txn, Budget, Setting, Notification
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Enable CORS for the Flask app
 
-DATA_FILE = 'transactions.json'
+# Database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Load data from file if it exists
+# Initialize db and migrate
+db.init_app(app)
+migrate.init_app(app, db)
+
+# Define DATA_FILE and load data if it exists
+DATA_FILE = 'transactions.json'
 if os.path.exists(DATA_FILE):
     with open(DATA_FILE, 'r') as file:
         uploaded_data = json.load(file)
 else:
     uploaded_data = []  # Temporary in-memory data storage for uploaded transactions
 
+# Define possible column name variations
+COLUMN_MAP = {
+    'Date': ['date', 'DATE', 'trans. date', 'trans date', 'post date', 'posting date'],
+    'Description': ['description', 'desc', 'DESCRIPTION', 'desc.'],
+    'Amount': ['amount', 'amt', 'AMOUNT'],
+    'Balance': ['balance', 'BALANCE', 'bal'],
+    'Category': ['category', 'categories', 'CATEGORY']
+}
+
 def save_data():
     """
     Saves the uploaded transaction data to a JSON file for persistence.
+
+    This function saves the current state of the global 'uploaded_data'
+    list to a JSON file, ensuring data is not lost between sessions.
+
+    Args:
+        None
+
+    Returns:
+        None
     """
     with open(DATA_FILE, 'w') as file:
         json.dump(uploaded_data, file)
 
+def standardize_columns(df):
+    """
+    Standardizes column names in the DataFrame based on predefined variations.
+
+    This function renames columns in the given DataFrame to match the 
+    expected format by mapping variations of column names to standard 
+    column names.
+
+    Args:
+        df (DataFrame): The DataFrame with original column names.
+
+    Returns:
+        DataFrame: DataFrame with standardized column names.
+    """
+    new_columns = {}
+    found_columns = []
+
+    # Iterate through the original DataFrame columns
+    for col in df.columns:
+        col_lower = col.lower()
+        matched = False
+        
+        # Check if the column matches any variation in COLUMN_MAP
+        for standard_col, variations in COLUMN_MAP.items():
+            if col_lower in [v.lower() for v in variations]:
+                new_columns[col] = standard_col
+                found_columns.append(standard_col)
+                matched = True
+                break
+        
+        # If no match found, keep the original column name
+        if not matched:
+            new_columns[col] = col
+
+    # Debugging: Print the mapping results
+    print(f"Original Columns: {df.columns.tolist()}")
+    print(f"Mapped Columns: {new_columns}")
+    
+    # Rename columns in the DataFrame
+    df = df.rename(columns=new_columns)
+
+    # Check if all required columns are present after mapping
+    required_columns = set(COLUMN_MAP.keys())
+    if not required_columns.issubset(found_columns):
+        print(f"Missing Required Columns: {required_columns - set(found_columns)}")
+
+    return df
+
 def is_valid_transaction(transaction):
     """
     Validates a transaction record by checking required fields and data types.
+
+    This function ensures that a transaction record contains all required 
+    fields and that the 'Amount' and 'Balance' fields are numeric.
 
     Args:
         transaction (dict): The transaction record to validate.
@@ -73,8 +158,8 @@ def upload_file():
     Uploads a CSV file and processes its contents.
 
     This function handles file upload, validates if the file is a CSV,
-    and checks each transaction for validity before adding it to the
-    global in-memory storage.
+    standardizes column names, and checks each transaction for validity 
+    before adding it to the global in-memory storage.
 
     Returns:
         Response (JSON): A success response containing the valid data or an
@@ -88,19 +173,23 @@ def upload_file():
         return jsonify({'error': 'No file received'}), 400
 
     # Ensure it's a CSV file
-    if not file.filename.endswith('.csv'):
+    if not file.filename.lower().endswith('.csv'):
         return jsonify({'error': 'Invalid file type. Only CSV files are allowed.'}), 400
 
     try:
         # Process the CSV file using pandas
         df = pd.read_csv(file)
-        data = df.to_dict(orient='records')
 
+        # Standardize column names
+        df = standardize_columns(df)
+
+        # Convert DataFrame to a list of dictionaries
+        data = df.to_dict(orient='records')
         # Validate each transaction in the CSV data
         valid_data = [record for record in data if is_valid_transaction(record)]
 
         if not valid_data:
-            return jsonify({'error': 'No valid transactions found in the file.'}), 400
+            return jsonify({'error': 'No valid transactions found in the file. Please check column mapping and format.'}), 400
 
         # Append valid data to the existing data structure and save to file
         uploaded_data.extend(valid_data)
@@ -117,6 +206,9 @@ def get_data():
     This function returns the in-memory data storage that contains all 
     uploaded transaction records.
 
+    Args:
+        None
+
     Returns:
         Response (JSON): A success response containing all transaction data.
     """
@@ -127,9 +219,10 @@ def add_transaction():
     """
     Adds a new transaction to the data storage.
 
-    This function receives transaction data as JSON, validates the required fields,
-    and converts the 'Amount' and 'Balance' to float for consistency. If validation 
-    passes, the new transaction is added to the global in-memory storage and saved to the file.
+    This function receives transaction data as JSON, validates the required 
+    fields, and converts the 'Amount' and 'Balance' to float for consistency. 
+    If validation passes, the new transaction is added to the global in-memory 
+    storage and saved to the file.
 
     Returns:
         Response (JSON): A success response with the added transaction or an error 
