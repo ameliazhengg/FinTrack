@@ -91,23 +91,25 @@ cd FinTrack
 ```
 
 #### 2. Set Up the Backend
-2.1 Navigate to the `backend` directory:
+
+##### 2.1 Navigate to the `backend` directory:
 ```bash
 cd backend
 ```
 
-2.2 Create a virtual environment:
+##### 2.2 Create a virtual environment:
 ```bash
 python3 -m venv venv  
 source venv/bin/activate  # On Windows, use venv\\Scripts\\activate
 ```
 
-2.3 Install dependencies:
+##### 2.3 Install dependencies:
 ```bash
 pip install -r requirements.txt  
 ```
 
-2.4 Set Up the .env File
+##### 2.4 Set Up the .env File
+
 Create a `.env` file in the root directory with the following variable:
 ```bash
 DATABASE_URI=postgresql+psycopg2://<YOUR_USER>:<YOUR_PASSWORD>@localhost:5432/<DATABASE_NAME>
@@ -117,10 +119,11 @@ REPLACE `<YOUR_PASSWORD>` with your Postgres password
 REPLACE `<DATABASE_NAME>` with your database name (FinTrack is preferred)
 * For SWEs: DO NOT PUSH THIS TO GITHUB, it is already specified in `.gitignore` MAKE SURE YOU NEVER PUSH THIS FILE!!!
 
-2.5 Set Up the Database:
-1 Open pgAdmin and create a new database with the name you specified in `DATABASE_URI`.
+##### 2.5 Set Up the Database:
 
-2 After setting up your PostgreSQL database in pgAdmin, initialize the database by running the following Flask command:
+###### 1 Open pgAdmin and create a new database with the name you specified in `DATABASE_URI`.
+
+###### 2 After setting up your PostgreSQL database in pgAdmin, initialize the database by running the following Flask command:
 ```bash
 flask db upgrade
 ```
@@ -131,7 +134,7 @@ flask db init
 ```
 before running upgrade
 
-2.6 Start the Flask Server
+##### 2.6 Start the Flask Server
 Start the backend server with:
 ```bash
 python app.py
@@ -139,21 +142,20 @@ python app.py
 The Flask API should now be running at `http://127.0.0.1:5005`.
 
 #### 3. Set Up the Frontend
-3.1 In another terminal tab, navigate to the `frontend` directory:
+##### 3.1 In another terminal tab, navigate to the `frontend` directory:
 ```bash 
 cd ../frontend
 ```
 
-3.2 Install dependencies:
+##### 3.2 Install dependencies:
 ```bash
 npm install
 ``` 
 
-3.3 Start the React development server:
+##### 3.3 Start the React development server:
 ```bash 
 npm start
 ```  
-
 The React app should now be running at `http://localhost:3000` and will automatically connect to the Flask backend.
 
 ---
@@ -197,26 +199,26 @@ This command rolls back the most recent migration, undoing the changes it introd
 
 #### Common Migrations Workflow
 
-1 Make Changes to `models.py`
+##### 1 Make Changes to `models.py`
 Modify the models by adding, altering, or removing fields as needed for the database schema.
 
-2 Generate Migration
+##### 2 Generate Migration
 Run the following command to create a migration script that reflects your changes:
 ```bash
 flask db migrate -m "describe your changes"
 ```
 This will generate a new migration file in the `migrations/versions` directory, capturing the intended changes to the schema.
 
-3 Review Migration Script
+##### 3 Review Migration Script
 Check the generated migration file to confirm it accurately reflects the changes made in `models.py`. Ensure no unintended alterations are present.
 
-4 Apply Migration
+##### 4 Apply Migration
 Run `flask db upgrade` to apply the migration to the database schema. This step should be done once you are confident that the migration script is accurate.
 
-5 Test and Validate
+##### 5 Test and Validate
 After applying the migration, test the database and application to verify that the changes were successful and did not introduce any issues.
 
-6 Rolling Back (If Necessary)
+##### 6 Rolling Back (If Necessary)
 If any errors occur after a migration, use flask db downgrade to revert the changes. Make further adjustments as needed and repeat the process from Step 2.
 
 
