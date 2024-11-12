@@ -1,0 +1,4 @@
+Flask==3.0.2
+flask-cors
+pandas
+psycopg2-binary
