@@ -6,7 +6,6 @@
 
 .content-wrapper {
   display: flex;
-  gap: 20px;
   padding: 20px;
   flex-wrap: wrap;
   flex-direction: row;
@@ -15,13 +14,13 @@
 
 .main-section {
   flex: 2;
-  min-width: 60%;
+  min-width: 50%;
   overflow: auto;
-  max-width: calc(100% - 380px - 20px); /* Adjusts based on sidebar width and gap */
+  max-width: calc(100% - 500px); /* Adjusts based on sidebar width and gap */
 }
 
 .sidebar-section {
-  width: 30%;
+  width: 50%;
   max-width: 380px;
   display: flex;
   flex-direction: column;
@@ -29,7 +28,7 @@
 }
 
 /* Medium Breakpoint: Convert sidebar to row layout */
-@media (max-width: 1470px) {
+@media (max-width: 897px) {
   .content-wrapper {
     flex-direction: column;
   }

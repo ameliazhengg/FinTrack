@@ -14,7 +14,7 @@ import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
  * 
  * Props:
  * @param {Array<Object>} data - An array of transaction objects containing 
- * information like Date, Description, Amount, Balance, and Category.
+ * information like Date, Description, Amount, and Category.
  * @param {Function} setTableData - A function to update the transaction data 
  * in the parent component state.
  * 
@@ -31,7 +31,6 @@ import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
       Date: null,
       Description: '',
       Amount: '',
-      Balance: '',
       Category: ''
     });
 
@@ -199,7 +198,7 @@ import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
   const handleAddTransaction = async () => {
     // Check if all fields are filled
     if (!newTransaction.Date || !newTransaction.Description || !newTransaction.Amount || 
-        !newTransaction.Balance || !newTransaction.Category) {
+        !newTransaction.Category) {
       alert('Please fill in all fields before adding a transaction.');
       return;
     }
@@ -217,7 +216,7 @@ import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
         // Update table data on successful addition
         setTableData((prevData) => [...prevData, transactionToAdd]);
         // Reset new transaction input fields
-        setNewTransaction({ Date: null, Description: '', Amount: '', Balance: '', Category: '' });
+        setNewTransaction({ Date: null, Description: '', Amount: '', Category: '' });
       }
     } catch (error) {
       console.error('Error adding transaction:', error);
@@ -307,8 +306,6 @@ import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
                 )}
               </th>
 
-              <th>Balance</th>
-
               <th
                 className={`sortable ${sortConfig.key === 'Category' ? (sortConfig.direction === 'asc' ? 'sorted-asc' : 'sorted-desc') : ''}`}
                 onClick={() => handleSort('Category')}
@@ -337,7 +334,6 @@ import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
                   <td className={transaction.Amount < 0 ? 'negative' : 'positive'}>
                     {transaction.Amount}
                   </td>
-                  <td>{transaction.Balance}</td>
                   <td>{transaction.Category}</td>
                   <td>
                     <button className="delete-button" onClick={() => handleDeleteTransaction(index)}>Delete</button>
@@ -372,15 +368,6 @@ import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
                   value={newTransaction.Amount}
                   onChange={handleInputChange}
                   placeholder="Amount"
-                />
-              </td>
-              <td>
-                <input
-                  type="number"
-                  name="Balance"
-                  value={newTransaction.Balance}
-                  onChange={handleInputChange}
-                  placeholder="Balance"
                 />
               </td>
               <td>
