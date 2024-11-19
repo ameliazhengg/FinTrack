@@ -15,13 +15,17 @@
 import React from 'react';
 import './Header.css';
 import logo from './cft_logo.png';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Header component: Renders a navigation bar with a logo, navigation links, and authentication buttons.
  * 
  * @returns {JSX.Element} - The rendered Header component.
  */
+
 function Header() {
+  const navigate = useNavigate();
+  const handleLoginClick = () => navigate('/LoginPage');
   return (
     <nav>
       {/* Logo section */}
@@ -43,7 +47,7 @@ function Header() {
 
       {/* Authentication buttons */}
       <div className="auth-buttons">
-        <button>Login</button>  {/* Login button placeholder */}
+      <button onClick={handleLoginClick}>Login</button>  {/* Login button placeholder */}
         <button>Sign Up</button>  {/* Sign-up button placeholder */}
       </div>
     </nav>
