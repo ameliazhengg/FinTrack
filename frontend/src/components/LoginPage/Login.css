@@ -1,0 +1,117 @@
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3b5bdb;
+    padding: 20px;
+  }
+  
+  .login-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+  }
+  
+  .icon-container {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .cart-icon {
+    width: 64px;
+    height: 64px;
+    fill: none;
+    stroke: white;
+    stroke-width: 2;
+  }
+  
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .input-group {
+    position: relative;
+  }
+  
+  .input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 12px 16px 12px 48px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .input-field::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .input-field:focus {
+    outline: none;
+    border-color: white;
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    border: none;
+    border-radius: 4px;
+    color: #3b5bdb;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-button:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .forgot-password {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .forgot-password a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+  }
+  
+  .forgot-password a:hover {
+    color: white;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 480px) {
+    .login-box {
+      padding: 1.5rem;
+    }
+    
+    .input-field {
+      font-size: 14px;
+      padding: 10px 14px 10px 40px;
+    }
+    
+    .login-button {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }

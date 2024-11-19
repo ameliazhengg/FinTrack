@@ -4,6 +4,7 @@ import Header from './components/Header/Header';
 import FinTrackTable from './components/FinTrackTable/FinTrackTable';
 import WelcomeSection from './components/WelcomeSection/WelcomeSection';
 import SpendingLimit from './components/SpendingLimit/SpendingLimit';
+import LoginPage from './components/LoginPage/LoginPage';
 import axios from 'axios';
 
 /**
