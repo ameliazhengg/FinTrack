@@ -1,39 +1,89 @@
 .App {
-    min-height: 100vh;
-    display: flex;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.main-section {
+  flex: 2;
+  min-width: 60%;
+  overflow: auto;
+  max-width: calc(100% - 380px - 20px); /* Adjusts based on sidebar width and gap */
+}
+
+.sidebar-section {
+  width: 30%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Medium Breakpoint: Convert sidebar to row layout */
+@media (max-width: 1470px) {
+  .content-wrapper {
     flex-direction: column;
   }
-  
-  .content-wrapper {
-    display: flex;
-    flex: 1;
-    gap: 20px;
-    padding: 20px;
-    min-height: 0; 
-    overflow: auto; 
-  }
-  
-  .main-section {
-    flex: 1;
-    min-width: 0;
-    overflow: auto; 
-  }
-  
+
   .sidebar-section {
-    width: 380px;
-    flex-shrink: 0; 
-    padding: 30px;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
   }
-  
-  /* Responsive layout for smaller screens */
-  @media (max-width: 1200px) {
-    .content-wrapper {
-      flex-direction: column;
-    }
-  
-    .sidebar-section {
-      width: 100%;
-      max-width: 380px;
-      align-self: center;
-    }
+}
+
+/* Small Breakpoint: Stack sidebar items in a column */
+@media (max-width: 768px) {
+  .sidebar-section {
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    align-items: center;
   }
+}
+
+/* Additional responsive settings for the table */
+.fintrack-table-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px;
+  width: 100%;
+  max-width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  background-color: white;
+}
+
+.fintrack-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.fintrack-table th, .fintrack-table td {
+  border: 1px solid #ddd;
+  text-align: left;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.fintrack-table th {
+  background-color: #f4f4f4;
+}
+
+/* Responsive font and padding for smaller screens */
+@media (max-width: 768px) {
+  .fintrack-table th, .fintrack-table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+}
