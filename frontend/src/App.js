@@ -1,3 +1,12 @@
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import Header from './components/Header/Header';
+import FinTrackTable from './components/FinTrackTable/FinTrackTable';
+import WelcomeSection from './components/WelcomeSection/WelcomeSection';
+import SpendingLimit from './components/SpendingLimit/SpendingLimit';
+import PieChart from './components/PieChart/PieChart';
+import axios from 'axios';
+
 /**
  * App Component
  * 
