@@ -100,8 +100,6 @@ def fuzzy_match_columns(df):
         else:
             print(f"Warning: Could not find a match for '{target}' with a sufficient score.")
 
-    # Debug output to show which columns were matched
-    print(f"Matched Columns: {matched_columns}")
 
     # Filter DataFrame to include only matched columns and rename them to the standard names
     try:
