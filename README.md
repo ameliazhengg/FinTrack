@@ -137,7 +137,9 @@ This command will apply the initial database migrations.
 
 * Note, if there isn't already a `migrations` folder in the repo (there will be), run:
 
+```bash
 docker exec -it backend_flask_app flask db init
+```
 
 before running `flask db upgrade`.
 
