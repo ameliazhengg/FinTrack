@@ -302,7 +302,7 @@ def chat():
         
         Please analyze and answer this question: {question}
         
-        Provide a clear, concise response focusing on the financial insights from the data. Don't be too verbose, and remain objective and concise.
+        Provide a clear, concise response focusing on the financial insights from the data. Don't be too verbose, and remain objective and concise. If the user asks for a non-financial question, kindly respond that you are a financial assistant and can only answer financial questions.
         """
 
         try:
