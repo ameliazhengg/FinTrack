@@ -1,23 +1,30 @@
-version: "3.8"
+version: '3.8'
 
 services:
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    build: ./backend
+    container_name: fintrack_backend
     ports:
-      - 5005:5005
+      - "5005:5005"
     environment:
-      FLASK_ENV: development
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - 3000:3000
+      - DATABASE_URI=${DATABASE_URI}
+      - FLASK_ENV=development
     depends_on:
-      - backend
+      - db
+    volumes:
+      - ./backend:/app
+
+  db:
+    image: postgres:13
+    container_name: fintrack_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
-  db_data:
+  pgdata:
