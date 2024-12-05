@@ -119,6 +119,11 @@ REPLACE `<YOUR_PASSWORD>` with your Postgres password
 REPLACE `<DATABASE_NAME>` with your database name (FinTrack is preferred)
 * For SWEs: DO NOT PUSH THIS TO GITHUB, it is already specified in `.gitignore` MAKE SURE YOU NEVER PUSH THIS FILE!!!
 
+Also, make sure to set up the OpenAI API key in the `.env` file in the root directory:
+```bash
+OPENAI_API_KEY=<YOUR_OPENAI_API_KEY>
+```
+
 ##### 2.5 Set Up the Database:
 
 ###### 1 Open pgAdmin and create a new database with the name you specified in `DATABASE_URI`.
