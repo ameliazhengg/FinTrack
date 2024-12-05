@@ -96,10 +96,12 @@ cd FinTrack
 
 Create a `.env` file in the `backend` directory with the following variables:
 
+```bash
 DATABASE_URI=postgresql+psycopg2://<YOUR_USER>:<YOUR_PASSWORD>@db:5432/<DATABASE_NAME>
 POSTGRES_USER=<YOUR_USER>
 POSTGRES_PASSWORD=<YOUR_PASSWORD>
 POSTGRES_DB=<DATABASE_NAME>
+```
 
 REPLACE `<YOUR_USER>` with your desired PostgreSQL user.  
 REPLACE `<YOUR_PASSWORD>` with your PostgreSQL password.  
@@ -111,7 +113,9 @@ REPLACE `<DATABASE_NAME>` with your database name (FinTrack is preferred).
 
 Run the following command from the project root to build and start the backend and database services:
 
+```bash
 docker-compose up --build
+```
 
 This command will:
 * Build the Docker image for the backend.
@@ -125,7 +129,9 @@ The Flask API should now be running at `http://127.0.0.1:5005`.
 
 To set up the database tables inside the running container, run the following command:
 
+```bash
 docker exec -it backend_flask_app flask db upgrade
+```
 
 This command will apply the initial database migrations.
 
