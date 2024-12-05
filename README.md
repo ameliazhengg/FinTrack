@@ -113,6 +113,9 @@ pip install -r requirements.txt
 Create a `.env` file in the root directory with the following variable:
 ```bash
 DATABASE_URI=postgresql+psycopg2://<YOUR_USER>:<YOUR_PASSWORD>@localhost:5432/<DATABASE_NAME>
+POSTGRES_USER=<YOUR_USER>
+POSTGRES_PASSWORD=<YOUR_PASSWORD>
+POSTGRES_DB=<DATABASE_NAME>
 ```
 REPLACE `<YOUR_USER>` with your Postgres user
 REPLACE `<YOUR_PASSWORD>` with your Postgres password
