@@ -90,59 +90,51 @@ git clone git@github.com:ameliazhengg/FinTrack.git
 cd FinTrack
 ```
 
-#### 2. Set Up the Backend
+#### 2. Set Up the Backend with Docker
 
-##### 2.1 Navigate to the `backend` directory:
-```bash
-cd backend
-```
+##### 2.1 Set Up the .env File
 
-##### 2.2 Create a virtual environment:
-```bash
-python3 -m venv venv  
-source venv/bin/activate  # On Windows, use venv\\Scripts\\activate
-```
+Create a `.env` file in the `backend` directory with the following variables:
 
-##### 2.3 Install dependencies:
-```bash
-pip install -r requirements.txt  
-```
-
-##### 2.4 Set Up the .env File
-
-Create a `.env` file in the root directory with the following variable:
-```bash
-DATABASE_URI=postgresql+psycopg2://<YOUR_USER>:<YOUR_PASSWORD>@localhost:5432/<DATABASE_NAME>
+DATABASE_URI=postgresql+psycopg2://<YOUR_USER>:<YOUR_PASSWORD>@db:5432/<DATABASE_NAME>
 POSTGRES_USER=<YOUR_USER>
 POSTGRES_PASSWORD=<YOUR_PASSWORD>
 POSTGRES_DB=<DATABASE_NAME>
-```
-REPLACE `<YOUR_USER>` with your Postgres user
-REPLACE `<YOUR_PASSWORD>` with your Postgres password
-REPLACE `<DATABASE_NAME>` with your database name (FinTrack is preferred)
-* For SWEs: DO NOT PUSH THIS TO GITHUB, it is already specified in `.gitignore` MAKE SURE YOU NEVER PUSH THIS FILE!!!
 
-##### 2.5 Set Up the Database:
+REPLACE `<YOUR_USER>` with your desired PostgreSQL user.  
+REPLACE `<YOUR_PASSWORD>` with your PostgreSQL password.  
+REPLACE `<DATABASE_NAME>` with your database name (FinTrack is preferred).
 
-###### 1 Open pgAdmin and create a new database with the name you specified in `DATABASE_URI`.
+* For SWEs: DO NOT PUSH THIS TO GITHUB, it is already specified in `.gitignore`. MAKE SURE YOU NEVER PUSH THIS FILE!
 
-###### 2 After setting up your PostgreSQL database in pgAdmin, initialize the database by running the following Flask command:
-```bash
-flask db upgrade
-```
-This command will apply the initial database migrations and set up the database tables.
-* Note, if there isn't already a `migrations` folder in the repo (there will be), run:
-```bash
-flask db init
-```
-before running upgrade
+##### 2.2 Build and Run Docker Containers
 
-##### 2.6 Start the Flask Server
-Start the backend server with:
-```bash
-python app.py
-```
+Run the following command from the project root to build and start the backend and database services:
+
+docker-compose up --build
+
+This command will:
+* Build the Docker image for the backend.
+* Spin up a container for the Flask API and another for the PostgreSQL database.
+
 The Flask API should now be running at `http://127.0.0.1:5005`.
+
+##### 2.3 Set Up the Database
+
+###### 1. Apply Initial Database Migrations
+
+To set up the database tables inside the running container, run the following command:
+
+docker exec -it backend_flask_app flask db upgrade
+
+This command will apply the initial database migrations.
+
+* Note, if there isn't already a `migrations` folder in the repo (there will be), run:
+
+docker exec -it backend_flask_app flask db init
+
+before running `flask db upgrade`.
+
 
 #### 3. Set Up the Frontend
 ##### 3.1 In another terminal tab, navigate to the `frontend` directory:
