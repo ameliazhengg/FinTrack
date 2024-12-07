@@ -6,6 +6,7 @@ import WelcomeSection from './components/WelcomeSection/WelcomeSection';
 import SpendingLimit from './components/SpendingLimit/SpendingLimit';
 import PieChart from './components/PieChart/PieChart';
 import axios from 'axios';
+import ChatBot from './components/ChatBot/ChatBot';
 
 /**
  * App Component
@@ -109,6 +110,7 @@ function App() {
         <div className="sidebar-section">
           <SpendingLimit />
           <PieChart transactions={tableData} />
+          <ChatBot transactions={tableData} />
         </div>
       </div>
     </div>

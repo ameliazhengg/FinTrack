@@ -9,9 +9,11 @@ from dotenv import load_dotenv
 from database import db, migrate
 from models import User, Txn, Budget, Setting, Notification
 from fuzzywuzzy import fuzz, process
+from openai import OpenAI
 
 # Load environment variables
 load_dotenv()
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Enable CORS for the Flask app
@@ -143,7 +145,6 @@ def is_valid_transaction(transaction):
 
     return True
 
-
 @app.route('/upload', methods=['POST'])
 def upload_file():
     """
@@ -273,6 +274,66 @@ def delete_transaction():
     deleted_transaction = uploaded_data.pop(transaction_index)
     save_data()  # Save data to the JSON file for persistence
     return jsonify(deleted_transaction), 200
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    """
+    Processes a chat request using OpenAI's API.
+    """
+    try:
+        data = request.json
+        if not data:
+            return jsonify({'error': 'No data received'}), 400
+            
+        question = data.get('question')
+        if not question:
+            return jsonify({'error': 'No question provided'}), 400
+            
+        transactions = data.get('transactions', uploaded_data)
+        if not transactions:
+            return jsonify({'error': 'No transactions data available'}), 400
+
+        print(f"Processing question: {question}")
+        print(f"Number of transactions: {len(transactions)}")
+
+        prompt = f"""
+        Based on the following financial transactions data:
+        {json.dumps(transactions, indent=2)}
+        
+        Please analyze and answer this question: {question}
+        
+        Provide a clear, concise response focusing on the financial insights from the data. Don't be too verbose, and remain objective and concise. If the user asks for a non-financial question, kindly respond that you are a financial assistant and can only answer financial questions.
+        """
+
+        try:
+            completion = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "You are a helpful financial assistant that analyzes transaction data and provides insights."
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ]
+            )
+            
+            response_content = completion.choices[0].message.content
+            print(f"Generated response: {response_content[:100]}...")  # Print first 100 chars of response
+            
+            return jsonify({
+                'response': response_content
+            }), 200
+
+        except Exception as openai_error:
+            print(f"OpenAI API error: {str(openai_error)}")
+            return jsonify({'error': f'OpenAI API error: {str(openai_error)}'}), 500
+
+    except Exception as e:
+        print(f"Server error in chat endpoint: {str(e)}")
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5005)

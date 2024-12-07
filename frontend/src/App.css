@@ -1,89 +1,69 @@
-.App {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
 .content-wrapper {
   display: flex;
   padding: 20px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Prevent wrapping unless absolutely necessary */
   flex-direction: row;
-  gap: 20px;
   align-items: flex-start;
+  gap: 20px; /* Add consistent spacing */
 }
 
 .main-section {
-  flex: 2;
-  min-width: 50%;
+  flex: 1; /* Make main section flexible */
+  min-width: 0; /* Ensure main section can shrink if necessary */
+  max-width: calc(100% - 320px); /* Account for sidebar width */
   overflow: auto;
-  max-width: calc(100% - 400px); /* Adjusts based on sidebar width and gap */
 }
 
 .sidebar-section {
-  width: 50%;
-  max-width: 380px;
+  flex-shrink: 0; /* Prevent sidebar from shrinking */
+  max-width: 300px; /* Set maximum width for sidebar */
+  min-width: 250px; /* Set minimum width for sidebar */
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
 
-/* Medium Breakpoint: Convert sidebar to row layout */
-@media (max-width: 897px) {
+/* Medium Breakpoint: Convert layout to column with centered sections */
+@media (max-width: 1277px) {
   .content-wrapper {
     flex-direction: column;
+    align-items: center; /* Center both sections horizontally */
+  }
+
+  .main-section {
+    width: 100%; /* Full width for the main section */
+    max-width: 800px; /* Maintain readability */
+    margin: 0 auto; /* Center the main section */
   }
 
   .sidebar-section {
     flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
+    width: 100%; /* Full width for sidebar */
+    max-width: 800px; /* Align with main section */
+    margin: 20px 0; /* Add vertical spacing */
   }
 }
 
-/* Small Breakpoint: Stack sidebar items in a column */
+/* Small Breakpoint: Ensure stacking and centering */
 @media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .main-section {
+    width: 100%; /* Full width for small screens */
+    max-width: 600px; /* Smaller max-width for small screens */
+    margin: 0 auto;
+  }
+
   .sidebar-section {
     flex-direction: column;
     width: 100%;
-    max-width: 100%;
+    max-width: 600px; /* Match the main section width */
     align-items: center;
+    margin: 20px 0;
   }
 }
 
-/* Additional responsive settings for the table */
-.fintrack-table-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 10px;
-  width: 100%;
-  max-width: 100%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  background-color: white;
-}
 
-.fintrack-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.fintrack-table th, .fintrack-table td {
-  border: 1px solid #ddd;
-  text-align: left;
-  padding: 8px;
-  font-size: 14px;
-}
-
-.fintrack-table th {
-  background-color: #f4f4f4;
-}
-
-/* Responsive font and padding for smaller screens */
-@media (max-width: 768px) {
-  .fintrack-table th, .fintrack-table td {
-    font-size: 12px;
-    padding: 6px;
-  }
-}

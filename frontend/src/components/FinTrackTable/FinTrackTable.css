@@ -1,14 +1,17 @@
 .fintrack-table-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center; /* Center the table horizontally */
     padding: 10px;
     width: 100%;
-    max-width: 100%;
+    max-width: 800px; /* Match with the main-section max-width */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     background-color: white;
-    overflow-x: auto; /* Enables horizontal scrolling if content overflows */
+    overflow-x: auto;
+    max-height: 500px;
+    overflow-y: auto;
+    margin: 0 auto; /* Ensure centering */
 }
 
 .fintrack-table {
@@ -35,6 +38,14 @@
 .fintrack-table th:not(.sortable) {
     cursor: default;
     background-color: #f4f4f4;
+}
+
+.scrollable-description {
+    max-width: 200px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 5px;
+    border: 1px solid #ddd;
 }
 
 .sort-icon {
@@ -210,7 +221,7 @@ input::placeholder {
 }
 
 /* Early breakpoint for medium screens to prevent overlap */
-@media (max-width: 1471px) {
+@media (max-width: 1277px) {
     .content-wrapper {
         flex-direction: column;
     }

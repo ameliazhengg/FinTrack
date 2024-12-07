@@ -17,8 +17,9 @@ psycopg2-binary==2.9.10
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.2
-python-Levenshtein==0.20.10
 six==1.16.0
 SQLAlchemy==2.0.36
 typing_extensions==4.12.2
 tzdata==2024.2
+openai>=0.27.0
+langchain>=0.0.230

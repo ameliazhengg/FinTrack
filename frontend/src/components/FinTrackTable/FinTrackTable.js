@@ -3,7 +3,6 @@ import './FinTrackTable.css';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
 
 /**
  * FinTrackTable Component
@@ -25,15 +24,14 @@ import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
  * Example usage:
  * <FinTrackTable data={tableData} setTableData={setTableData} />
  */
-  const FinTrackTable = ({ data, setTableData }) => {
-    // State to manage a new transaction entry
-    const [newTransaction, setNewTransaction] = useState({
-      Date: null,
-      Description: '',
-      Amount: '',
-      Category: ''
-    });
-
+const FinTrackTable = ({ data, setTableData }) => {
+  // State to manage a new transaction entry
+  const [newTransaction, setNewTransaction] = useState({
+    Date: null,
+    Description: '',
+    Amount: '',
+    Category: ''
+  });
 
   // State to manage sorting
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
@@ -41,6 +39,27 @@ import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
   // State for search and date filtering
   const [searchTerm, setSearchTerm] = useState('');
   const [dateRange, setDateRange] = useState({ start: null, end: null });
+
+  // State for visible rows in lazy-loading
+  const [visibleRows, setVisibleRows] = useState(20);
+
+  // Incrementally load more rows when scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      const container = document.querySelector('.fintrack-table-container');
+      if (
+        container.scrollTop + container.clientHeight >= container.scrollHeight &&
+        visibleRows < data.length
+      ) {
+        setVisibleRows((prev) => Math.min(prev + 20, data.length));
+      }
+    };
+
+    const container = document.querySelector('.fintrack-table-container');
+    container.addEventListener('scroll', handleScroll);
+
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [data, visibleRows]);
 
 
   /**
@@ -330,7 +349,11 @@ import { ReactComponent as FilterIcon } from '../../assets/icons/filter.svg';
               filterData().map((transaction, index) => (
                 <tr key={index}>
                   <td>{new Date(transaction.Date).toLocaleDateString()}</td>
-                  <td>{transaction.Description}</td>
+                  <td>
+                    <div className="scrollable-description">
+                      {transaction.Description}
+                    </div>
+                  </td>
                   <td className={transaction.Amount < 0 ? 'negative' : 'positive'}>
                     {transaction.Amount}
                   </td>
