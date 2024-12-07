@@ -66,4 +66,44 @@
   }
 }
 
+/* Floating Chat Button */
+.chat-toggle-button {
+  position: fixed;
+  bottom: 5px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: #dc3545;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, bottom 0.3s ease;
+  z-index: 1000;
+}
+
+/* Floating Chat Button Icon Styling */
+.chat-toggle-button svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}
+
+/* Chatbot Wrapper */
+.chatbot-wrapper {
+  position: fixed;
+  bottom: 80px; /* Adjust to position above the floating button */
+  right: 20px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: white;
+  z-index: 1000;
+}
+
+
 
